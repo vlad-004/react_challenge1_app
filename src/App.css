@@ -1,0 +1,18 @@
+#user-list {
+    width: 80%;
+    /*max-width: 90%;*/
+    margin: 4rem auto;
+}
+#user-form {
+    width: 60%;
+    max-width: 500px;
+    margin: 4rem auto;
+}
+
+.main-content {
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
+    /*height: 50em;*/
+    margin-top: 4rem;
+}
