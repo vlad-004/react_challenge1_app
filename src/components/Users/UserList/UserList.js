@@ -5,15 +5,13 @@ export const UserList = (props) => {
     return <Card className="user-list-content">
         <ul>
             {
-                !props.users.length
-                    ? ''
-                    : props.users.map(
-                        (user) => (
-                            <li key={user.id}>
-                                Имя: {user.name + ' Возраст: ' + user.age}
-                            </li>
-                        )
+                props.users.map(
+                    (user) => (
+                        <li key={user.id}>
+                            Имя: {user.name + ' Возраст: ' + user.age}
+                        </li>
                     )
+                )
             }
         </ul>
     </Card>

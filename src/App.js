@@ -2,36 +2,24 @@ import {UserForm} from "./components/Users/UserForm/UserForm";
 import {UserList} from "./components/Users/UserList/UserList";
 import "./App.css";
 import {useState} from "react";
-import {ErrorModal} from "./components/UI/Modals/ErrorModal/ErrorModal";
 
 const App = () => {
-    const [users, setUsers] = useState([]);
-    const saveUserHandler = (inputData) => {
-        setUsers(prevUsers => {
-            return [inputData, ...prevUsers]
+    const [userList, setUserList] = useState([]);
+
+    //TODO: Автор исопльзует вместо inputData 2 аргумента name,age - но это не гибко и чем больше будет инпутов в форме тем больше аргументов в этой функции
+    const createUserHandler = (inputData) => {
+        setUserList(prevUserList => {
+            return [...prevUserList, inputData] // от перемены мест слагаемых зависит в каком порядке будут выводится данные
         });
     };
-    const showErrorModalHandler = (errorData) => {
-        setErrorData(errorData);
-        setModalState('show');
-    }
-
-    let [errorData, setErrorData] = useState('');
-    let [modalState, setModalState] = useState('hide');
-
-    const closeModalHandler = () => {
-        setModalState('hide');
-        setErrorData('');
-    }
 
     return <div className={"main-content"}>
         <section id={"user-form"}>
-            <UserForm onFormError={showErrorModalHandler} onAddUser={saveUserHandler}/>
+            <UserForm onCreateUser={createUserHandler}/>
         </section>
         <section id={"user-list"}>
-            <UserList users={users}/>
+            <UserList users={userList}/>
         </section>
-        <ErrorModal modalState={modalState} errorData={errorData} onCloseModal={closeModalHandler}/>
     </div>;
 };
 

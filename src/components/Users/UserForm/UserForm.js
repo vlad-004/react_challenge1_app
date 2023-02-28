@@ -2,36 +2,38 @@ import {Card} from "../../UI/Card/Card";
 import "./UserForm.css";
 import Button from "../../UI/Button/Button";
 import {useState} from "react";
+import {ErrorModal} from "../../UI/Modals/ErrorModal/ErrorModal";
 
 export const UserForm = (props) => {
 
-    const [inputUserName, setInputUserName] = useState("");
-    const [inputUserAge, setInputUserAge] = useState("");
+    const [inputName, setInputName] = useState("");
+    const [inputAge, setInputAge] = useState("");
 
-    const formSubmitHandler = (event) => {
+    const createUserHandler = (event) => {
         event.preventDefault();
 
         let newUserData = {
-            name: inputUserName,
-            age: inputUserAge,
-            id: Math.random(),
+            name: inputName,
+            age: inputAge,
+            id: Math.random().toString(),
         };
 
-        if (!filterInputData(newUserData)) {
+        //Автор курса делает валидацию прямо тут, не вынося в функцию, но как по мне так удобней.
+        if (!validateInputData(newUserData)) {
             return;
         }
 
-        props.onAddUser(newUserData);
+        props.onCreateUser(newUserData);
 
-        setInputUserName('');
-        setInputUserAge('');
+        setInputName('');
+        setInputAge('');
     }
 
-    //я мог бы придумать лучше но уже устал и не помню как бы это сделать лучше
+    //я мог бы придумать лучше, но уже устал и не помню как бы это сделать лучше
     //выполняется вся валидация необходимая для выполнения задания , хотя я бы еще добавил парочку проверок
-    const filterInputData = (newUserData) => {
+    const validateInputData = (newUserData) => {
         if (newUserData.name.trim().length === 0) {
-            props.onFormError({
+            setErrorData({
                 title: 'Заполните все поля',
                 message: 'Имя должно быть заполненно',
             });
@@ -39,14 +41,14 @@ export const UserForm = (props) => {
         }
 
         if (newUserData.age.trim().length === 0) {
-            props.onFormError({
+            setErrorData({
                 title: 'Заполните все поля',
                 message: 'Возраст должен быть заполнен',
             });
             return false;
         }
-        if (newUserData.age < '1') {
-            props.onFormError({
+        if (+newUserData.age < 1) {  // странный синтаксис преобразования в числовой тип TODO: артем можешь обьяснить это ?
+            setErrorData({
                 title: 'Неверный возраст',
                 message: 'Возраст должен быть больше 0',
             });
@@ -57,31 +59,36 @@ export const UserForm = (props) => {
         return true;
     }
 
-    const userFormChangeHandler = (event) => {
-        let inputValue = event.target.value;
-        switch (event.target.name) {
-            case "userAge":
-                setInputUserAge(inputValue)
-                break;
-            case "userName":
-                setInputUserName(inputValue)
-                break;
-            default:
-                break;
-        }
+    let [errorData, setErrorData] = useState(); // object
+    const errorHandler = () => {
+        setErrorData(undefined); //автор тут передает false, но лучше чтобы типизация была наглядней исопльзовать null или undefined - я так считаю
     }
 
-    return <Card>
-        <form onSubmit={formSubmitHandler}>
-            <div className={"form-control"}>
-                <label htmlFor="userName">Имя</label>
-                <input name="userName" type="text" value={inputUserName} onChange={userFormChangeHandler}/>
+    const nameChangeHandler = (event) => {
+        setInputName(event.target.value)
+    }
 
-                <label htmlFor="userAge">Возраст</label>
-                <input name="userAge" type="text" value={inputUserAge} onChange={userFormChangeHandler}/>
+    const ageChangeHandler = (event) => {
+        setInputAge(event.target.value)
+    }
 
-                <Button type={"submit"}>Добавить юзера</Button>
-            </div>
-        </form>
-    </Card>
+    return (
+        <div>
+            {/*Это супер отличный способ вывода модалки, я не додумался до такого */}
+            {errorData && <ErrorModal onCloseModal={errorHandler} errorData={errorData} />}
+            <Card>
+                <form onSubmit={createUserHandler}>
+                    <div className={"form-control"}>
+                        <label htmlFor="userName">Имя</label>
+                        <input name="userName" type="text" value={inputName} onChange={nameChangeHandler}/>
+
+                        <label htmlFor="userAge">Возраст</label>
+                        <input name="userAge" type="text" value={inputAge} onChange={ageChangeHandler}/>
+
+                        <Button type={"submit"} >Добавить юзера</Button>
+                    </div>
+                </form>
+            </Card>
+        </div>
+    );
 }

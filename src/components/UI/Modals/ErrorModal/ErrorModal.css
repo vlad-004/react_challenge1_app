@@ -1,11 +1,12 @@
 /* The Modal (background) */
 .modal {
-    display: none; /* Hidden by default */
+    display: block; /* Hidden by default */
     position: fixed; /* Stay in place */
     padding-top: 100px; /* Location of the box */
-    left: 0;
-    top: 0;
+    /*left: 0;*/
+    /*top: 0;*/
     width: 100%; /* Full width */
+    max-width: 500px;
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
 }
@@ -20,9 +21,9 @@
     top: 0;
 }
 
-.modal-show {
-    display: block !important;
-}
+/*.modal-show {*/
+/*    display: block !important;*/
+/*}*/
 
 /* Modal Content */
 .modal-content {

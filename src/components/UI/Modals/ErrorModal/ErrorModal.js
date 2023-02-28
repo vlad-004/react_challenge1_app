@@ -1,4 +1,5 @@
 import './ErrorModal.css';
+import Button from "../../Button/Button";
 
 /**
  * Вызов модалки, текст ошибки передаем из пропсов
@@ -7,23 +8,24 @@ import './ErrorModal.css';
  * @constructor
  */
 export const ErrorModal = (props) => {
-    const closeModalHandler = () => {
-        props.onCloseModal();
-    }
-
     return (
-        <div id="myModal" className={props.modalState === 'show' ? "modal modal-show" : "modal"}>
+        // <Card className={"modal"}>  //автор использует тут компонент Card, но в моем случае эо не принципиально и Card мне тут не нужен раз я уже все наверстал итак
+        <div className={"modal"}>
             <div className="modal-content">
                 <div className="modal-header">
-                    <span onClick={closeModalHandler} className="close">&times;</span>
+                    <span onClick={props.onCloseModal} className="close">&times;</span>
                     <h2>{props.errorData.title}</h2>
                 </div>
                 <div className="modal-body">
                     <p>{props.errorData.message}</p>
                 </div>
+                <div className="modal-footer">
+                    {/*Кнопку закрытия я сделал сверху поэтому конструкция ниже лишь для того чтобы подразить автору курса и показать как использовать разный onclick аттрибут у кнопки */}
+                    <Button onClick={props.onCloseModal}>Закрыть</Button>
+                </div>
             </div>
 
-            <div onClick={closeModalHandler} className={"modal-overlay"}></div>
+            <div onClick={props.onCloseModal} className={"modal-overlay"}></div>
         </div>
     );
 }
