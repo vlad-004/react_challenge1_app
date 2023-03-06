@@ -1,7 +1,7 @@
 import {Card} from "../../UI/Card/Card";
 import "./UserForm.css";
 import Button from "../../UI/Button/Button";
-import {useState} from "react";
+import {useState, Fragment} from "react";
 import {ErrorModal} from "../../UI/Modals/ErrorModal/ErrorModal";
 
 export const UserForm = (props) => {
@@ -73,7 +73,7 @@ export const UserForm = (props) => {
     }
 
     return (
-        <div>
+        <Fragment>
             {/*Это супер отличный способ вывода модалки, я не додумался до такого */}
             {errorData && <ErrorModal onCloseModal={errorHandler} errorData={errorData} />}
             <Card>
@@ -89,6 +89,6 @@ export const UserForm = (props) => {
                     </div>
                 </form>
             </Card>
-        </div>
+        </Fragment>
     );
 }
