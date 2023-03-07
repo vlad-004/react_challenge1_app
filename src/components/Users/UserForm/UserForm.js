@@ -1,20 +1,20 @@
 import {Card} from "../../UI/Card/Card";
 import "./UserForm.css";
 import Button from "../../UI/Button/Button";
-import {useState, Fragment} from "react";
+import {useState, useRef, Fragment} from "react";
 import {ErrorModal} from "../../UI/Modals/ErrorModal/ErrorModal";
 
 export const UserForm = (props) => {
 
-    const [inputName, setInputName] = useState("");
-    const [inputAge, setInputAge] = useState("");
+    const nameInputRef = useRef(); // шторм подсвечивает 16 строку. (Unresolved variable value) Автор собственно не ставит пустую строку по умолчанию и оно итак работает.
+    const ageInputRef = useRef();
 
     const createUserHandler = (event) => {
         event.preventDefault();
 
         let newUserData = {
-            name: inputName,
-            age: inputAge,
+            name: nameInputRef.current.value,
+            age: ageInputRef.current.value,
             id: Math.random().toString(),
         };
 
@@ -25,8 +25,8 @@ export const UserForm = (props) => {
 
         props.onCreateUser(newUserData);
 
-        setInputName('');
-        setInputAge('');
+        nameInputRef.current.value = '';
+        ageInputRef.current.value = '';
     }
 
     //я мог бы придумать лучше, но уже устал и не помню как бы это сделать лучше
@@ -47,7 +47,7 @@ export const UserForm = (props) => {
             });
             return false;
         }
-        if (+newUserData.age < 1) {  // странный синтаксис преобразования в числовой тип TODO: артем можешь обьяснить это ?
+        if (+newUserData.age < 1) {
             setErrorData({
                 title: 'Неверный возраст',
                 message: 'Возраст должен быть больше 0',
@@ -64,28 +64,20 @@ export const UserForm = (props) => {
         setErrorData(undefined); //автор тут передает false, но лучше чтобы типизация была наглядней исопльзовать null или undefined - я так считаю
     }
 
-    const nameChangeHandler = (event) => {
-        setInputName(event.target.value)
-    }
-
-    const ageChangeHandler = (event) => {
-        setInputAge(event.target.value)
-    }
-
     return (
         <Fragment>
             {/*Это супер отличный способ вывода модалки, я не додумался до такого */}
-            {errorData && <ErrorModal onCloseModal={errorHandler} errorData={errorData} />}
+            {errorData && <ErrorModal onCloseModal={errorHandler} errorData={errorData}/>}
             <Card>
                 <form onSubmit={createUserHandler}>
                     <div className={"form-control"}>
                         <label htmlFor="userName">Имя</label>
-                        <input name="userName" type="text" value={inputName} onChange={nameChangeHandler}/>
+                        <input name="userName" type="text" ref={nameInputRef}/>
 
                         <label htmlFor="userAge">Возраст</label>
-                        <input name="userAge" type="text" value={inputAge} onChange={ageChangeHandler}/>
+                        <input name="userAge" type="text" ref={ageInputRef}/>
 
-                        <Button type={"submit"} >Добавить юзера</Button>
+                        <Button type={"submit"}>Добавить юзера</Button>
                     </div>
                 </form>
             </Card>
